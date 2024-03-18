@@ -26,13 +26,19 @@
 /// alias auc.js
 (function() {
     window.addEventListener("load", function() {
-        let asin = document.getElementById("ASIN");
-        if (asin) {
-            let url = document.location.protocol + "//" + document.location.host + "/dp/" + asin.value + "/";
-            if (url === document.location.href) {
-                return;
-            }
-            window.history.replaceState(null, null, url);
+        function getProductId() {
+            var m;
+            m = document.location.href.match(/(?:.+\/)?dp\/([^/?]+)/);
+            if (m) return m[1];
+            m = document.location.href.match(/gp\/product\/([^/?]+)/);
+            if (m) return m[1];
+            m = document.location.href.match(/ASIN\/([^/?]+)/);
+            if (m) return m[1];
+        }
+
+        var productId = getProductId();
+        if (productId) {
+            history.replaceState({}, document.title, 'https://www.amazon.com/dp/' + productId);
         }
     });
 })();
